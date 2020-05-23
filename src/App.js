@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
-import Suit from './Suit';
+import SocketContext from './contexts/Socketcontext';
 import Scratch from './Scratch';
-import CardContext from './contexts/Cardcontext';
 
 
 const App = () => {
 
+    useEffect(() => {
+
+    }, [])
+
     return (
-        <CardContext>
+        <SocketContext>
             <div>
-                <Suit name={'Hearts'} />
-                <Suit name={'Diamonds'} />
-                <Suit name={'Clubs'} />
-                <Suit name={'Spades'} />
+                <h2>App</h2>
+                <Scratch />
             </div>
-        </CardContext>
+        </SocketContext>
     )
 }
 
