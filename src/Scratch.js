@@ -9,30 +9,32 @@ const Scratch = () => {
 
     const inputEl = useRef(null)
     const socketRef = useRef(null)
-    const socketEmit = useRef(null);
+    //const socketEmit = useRef(null);
     // const ctx = useContext(SocketCtx);
+
     useEffect(() => {
         socketRef.current = io(ENDPOINT).open();
         console.log(socketRef.current);
 
-        // socketRef.current.on('connect', function () {
-        //     console.log("emitting msg");
-        //     socketEmit.current = socketRef.current.emit;
-        // });
+        socketRef.current.on('hello', function (data) {
+            console.log("receiving msg");
+            setMsg(data);
+            // socketEmit.current = socketRef.current.emit;
+        });
 
     }, [])
 
-    useEffect(() => {
-        console.log('useEffect');
-        if (socketRef.current !== null) {
-            let t = socketRef.current.emit('ping');
-            console.dir(t);
-        }
-    }, [msg])
+    //useEffect(() => {
+    //  console.log('useEffect');
+    // if (socketRef.current !== null) {
+    //     socketRef.current.emit('hello', inputEl.current);
+    // }
+    //}, [socketRef.current])
 
     const handleClick = (e) => {
         e.preventDefault();
-        setMsg(inputEl.current.value);
+        socketRef.current.emit('hello', inputEl.current.value);
+        //setMsg(inputEl.current.value);
     }
 
     return (
