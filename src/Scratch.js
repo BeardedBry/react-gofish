@@ -1,49 +1,64 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-// import { SocketCtx } from './contexts/Socketcontext';
-import io from 'socket.io-client';
-const ENDPOINT = "http://localhost:1111/";
+import { SocketCtx } from './contexts/Socketcontext';
+import CardDisplay from './CardDisplay';
+// import io from 'socket.io-client';
+// const ENDPOINT = "http://localhost:1111/";
 
 const Scratch = () => {
 
     const [msg, setMsg] = useState('');
 
-    const inputEl = useRef(null)
-    const socketRef = useRef(null)
-    //const socketEmit = useRef(null);
-    // const ctx = useContext(SocketCtx);
+    const inputEl = useRef(null);
+    //const socketRef = useRef(null);
+    //const dispatch = useContext(SocketCtx);
+    const { state, socketRequest } = useContext(SocketCtx);
 
-    useEffect(() => {
-        socketRef.current = io(ENDPOINT).open();
-        console.log(socketRef.current);
+    // useEffect(() => {
+    //     socketRef.current = io(ENDPOINT).open();
+    //     console.log(socketRef.current);
 
-        socketRef.current.on('hello', function (data) {
-            console.log("receiving msg");
-            setMsg(data);
-            // socketEmit.current = socketRef.current.emit;
-        });
+    //     socketRef.current.on('hello', function (data) {
+    //         console.log("receiving msg");
+    //         setMsg(data);
+    //         // socketEmit.current = socketRef.current.emit;
+    //     });
 
-    }, [])
-
-    //useEffect(() => {
-    //  console.log('useEffect');
-    // if (socketRef.current !== null) {
-    //     socketRef.current.emit('hello', inputEl.current);
-    // }
-    //}, [socketRef.current])
+    // }, [])
 
     const handleClick = (e) => {
+        console.log('handle click');
+        let request = inputEl.current.value;
+        inputEl.current.value = '';
+
+        //dispatch({ type: request });
+        socketRequest(request);
         e.preventDefault();
-        socketRef.current.emit('hello', inputEl.current.value);
-        //setMsg(inputEl.current.value);
+        //REQUEST_DECK();
     }
+
+    useEffect(() => {
+        console.log('state', state);
+    }, [state])
 
     return (
         <div>
-            <h1>{msg}</h1>
+            <h3>Console</h3>
             <form>
                 <input ref={inputEl} />
                 <button onClick={handleClick}>Submit</button>
             </form>
+            <div>
+                {
+                    state.length ?
+                        state.map((card) => {
+                            return <CardDisplay
+                                name={card.name}
+                                suit={card.suit}
+                                key={card.name + card.suit} />
+                        })
+                        : null
+                }
+            </div>
         </div>
     )
 }
