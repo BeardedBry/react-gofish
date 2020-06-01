@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import SocketContext from './contexts/Socketcontext';
 import Scratch from './Scratch';
-
+import './style.scss';
 
 const App = () => {
 

@@ -11,10 +11,15 @@ function receiver(state, action) {
     switch (action.type) {
         case 'SHUFFLE':
         case 'DECK':
-            //console.log('receiving deck', action.payload);
+            console.log('DECK', action.payload);
             return action.payload;
+        case 'START':
+            console.log('START', action.payload)
+            return action.payload;
+            break;
         default:
-            return state;
+            return action.payload;
+        //return state;
     }
 }
 
@@ -25,10 +30,11 @@ const SocketContext = (props) => {
     // Open socket and add listeners.
     useEffect(() => {
         socketRef.current = io(ENDPOINT).open();
-        console.log('useEffect ran');
+        //console.log('useEffect ran');
 
         // socketRef event listeners:
         socketRef.current.on('RECEIVE', (state, action) => {
+            //console.log('recieved from server');
             dispatch({ type: action, payload: state });
         });
 
